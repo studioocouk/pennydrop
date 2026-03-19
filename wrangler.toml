@@ -5,7 +5,7 @@ compatibility_date = "2026-03-19"
 # This links your code to the Database where puzzles are stored
 [[kv_namespaces]]
 binding = "PUZZLE_STORE"
-id = "YOUR_KV_NAMESPACE_ID"
+id = "725656297823478480d12f46d6d7f875"
 
 # This links to your High Score database
 [[d1_databases]]
