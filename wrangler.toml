@@ -12,3 +12,11 @@ id = "725656297823478480d12f46d6d7f875"
 binding = "DB"
 database_name = "penny_drop_scores"
 database_id = "f6e33361-2622-477c-895f-050b9d622bb3"
+{
+  "observability": {
+    "logs": {
+      "enabled": false,
+      "invocation_logs": true
+    }
+  }
+}
