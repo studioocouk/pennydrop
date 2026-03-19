@@ -167,73 +167,71 @@
     <p id="feedback-msg"></p>
 </div>
 
-<script>
-    // In the real app, this data would come from your Cloudflare Worker!
-    // This is just a test with the Big Ben data.
-    const testPuzzle = {
-        answer: "BIG BEN",
-        category: "LANDMARK",
-        stages: {
-            "0": ["🇬🇧", "🏛️", "🔔"],
-            "1": ["🇬🇧", "🏛️", "🔔", "🕰️", "🕛"],
-            "2": "The nickname for the Great Bell of the Great Clock of Westminster.",
-            "3": "2 Words",
-            "4": "_ _ _  _ _ _",
-            "5": "B _ _  _ E _"
-        }
-    };
+let currentStage = -1;
+// This automatically creates "2026-03-19" to match your KV Key
+const puzzleId = new Date().toISOString().split('T')[0]; 
 
-    let currentStage = 0;
-
-    function handleGuess() {
-        const input = document.getElementById('guess-input');
-        const guess = input.value.toUpperCase().trim();
-        const feedback = document.getElementById('feedback-msg');
-
-        if (guess === testPuzzle.answer) {
-            feedback.innerHTML = "<span class='success'>PENNY DROP! You got it!</span>";
-            input.disabled = true;
-        } else {
-            currentStage++;
-            if (currentStage <= 5) {
-                updateUI();
-                feedback.innerText = "Not quite! The penny drops deeper...";
-                input.value = "";
-            } else {
-                feedback.innerText = "Game Over! The answer was: " + testPuzzle.answer;
-                input.disabled = true;
-            }
-        }
-    }
-
-    function updateUI() {
-        const emojiDisplay = document.getElementById('emoji-display');
-        const hintText = document.getElementById('hint-text');
-        const skeleton = document.getElementById('word-skeleton');
-        const dots = document.querySelectorAll('.dot');
-
-        // Update Emojis (Stages 0 and 1)
-        if (currentStage === 0) emojiDisplay.innerText = testPuzzle.stages["0"].join(' ');
-        if (currentStage === 1) emojiDisplay.innerText = testPuzzle.stages["1"].join(' ');
-
-        // Update Text Hint (Stage 2)
-        if (currentStage >= 2) hintText.innerText = testPuzzle.stages["2"];
-
-        // Update Structure/Skeleton (Stages 3, 4, 5)
-        if (currentStage === 3) skeleton.innerText = testPuzzle.stages["3"];
-        if (currentStage === 4) skeleton.innerText = testPuzzle.stages["4"];
-        if (currentStage === 5) skeleton.innerText = testPuzzle.stages["5"];
-
-        // Update Dots
-        dots.forEach((dot, idx) => {
-            if (idx === currentStage) dot.classList.add('active');
-            else dot.classList.remove('active');
+async function initGame() {
+    try {
+        const response = await fetch('https://pennydrop.studiooonurorkut.workers.dev', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ puzzleId, currentStage: -1, guess: "" })
         });
+        const data = await response.json();
+        
+        if (data.error) {
+            document.getElementById('feedback-msg').innerText = "Puzzle not found for today.";
+            return;
+        }
+
+        currentStage = 0;
+        updateUI(data.newClue, data.category);
+    } catch (err) {
+        document.getElementById('feedback-msg').innerText = "Connection error. Is the Worker live?";
     }
+}
 
-    // Initialize the first stage
-    updateUI();
-</script>
+async function handleGuess() {
+    const input = document.getElementById('guess-input');
+    const response = await fetch('https://pennydrop.studiooonurorkut.workers.dev', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ puzzleId, currentStage, guess: input.value })
+    });
+    const result = await response.json();
 
+    if (result.solved) {
+        document.getElementById('feedback-msg').innerHTML = `<span class='success'>${result.message}</span>`;
+        input.disabled = true;
+    } else if (result.gameOver) {
+        document.getElementById('feedback-msg').innerText = "Game Over! Answer: " + result.answer;
+        input.disabled = true;
+    } else {
+        currentStage = result.nextStage;
+        updateUI(result.newClue);
+        input.value = "";
+    }
+}
+
+function updateUI(clue, category) {
+    if (category) document.getElementById('category-badge').innerText = "CATEGORY: " + category;
+    
+    const display = document.getElementById('emoji-display');
+    const hintArea = document.getElementById('hint-text');
+    const skeleton = document.getElementById('word-skeleton');
+
+    // Display emojis for stages 0 and 1, text for others
+    if (currentStage <= 1) display.innerText = Array.isArray(clue) ? clue.join(' ') : clue;
+    if (currentStage === 2) hintArea.innerText = clue;
+    if (currentStage >= 3) skeleton.innerText = clue;
+
+    document.querySelectorAll('.dot').forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentStage);
+    });
+}
+
+// Start the game logic
+initGame();
 </body>
 </html>
