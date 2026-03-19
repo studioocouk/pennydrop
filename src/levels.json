@@ -1,0 +1,132 @@
+[
+  {
+    "id": "2026-03-20",
+    "answer": "ANGKOR WAT",
+    "category": "Landmark",
+    "stages": {
+      "0": ["🇰🇭", "🛕"],
+      "1": ["🇰🇭", "🛕", "🌳", "🐒"],
+      "2": "A massive Buddhist temple complex in Cambodia.",
+      "3": "2 Words",
+      "4": "_ _ _ _ _ _  _ _ _",
+      "5": "A _ _ _ _ R  W _ _"
+    }
+  },
+  {
+    "id": "2026-03-21",
+    "answer": "PIECE OF MIND",
+    "category": "Idiom",
+    "stages": {
+      "0": ["✌️", "🧠"],
+      "1": ["✌️", "🧠", "🗣️", "💢"],
+      "2": "To tell someone exactly what you think in an angry way.",
+      "3": "3 Words",
+      "4": "_ _ _ _ _  _ _  _ _ _ _",
+      "5": "P _ _ _ E  O _  M _ _ D"
+    }
+  },
+  {
+    "id": "2026-03-22",
+    "answer": "SKYFALL",
+    "category": "Movie",
+    "stages": {
+      "0": ["🇬🇧", "☁️", "⬇️"],
+      "1": ["🇬🇧", "☁️", "⬇️", "🔫", "🍸"],
+      "2": "A 2012 James Bond film featuring a Scottish estate.",
+      "3": "1 Word",
+      "4": "_ _ _ _ _ _ _",
+      "5": "S _ _ F _ _ L"
+    }
+  },
+  {
+    "id": "2026-03-23",
+    "answer": "FLORENCE NIGHTINGALE",
+    "category": "Person",
+    "stages": {
+      "0": ["🇬🇧", "👩‍⚕️", "🕯️"],
+      "1": ["🇬🇧", "👩‍⚕️", "🕯️", "🏥", "🕊️"],
+      "2": "The founder of modern nursing, known as 'The Lady with the Lamp'.",
+      "3": "2 Words",
+      "4": "_ _ _ _ _ _ _ _  _ _ _ _ _ _ _ _ _ _",
+      "5": "F _ _ _ _ _ C E  N _ _ _ _ _ _ _ _ E"
+    }
+  },
+  {
+    "id": "2026-03-24",
+    "answer": "SHEPHERD'S PIE",
+    "category": "Food",
+    "stages": {
+      "0": ["🐑", "🥧"],
+      "1": ["🐑", "🥧", "🥔", "🥕"],
+      "2": "A traditional British dish of minced lamb topped with mashed potato.",
+      "3": "2 Words",
+      "4": "_ _ _ _ _ _ _ _ ' _  _ _ _",
+      "5": "S _ _ _ _ _ R D ' S  P _ E"
+    }
+  },
+  {
+    "id": "2026-03-25",
+    "answer": "LIVERPOOL",
+    "category": "City",
+    "stages": {
+      "0": ["🇬🇧", "🚢", "🎸"],
+      "1": ["🇬🇧", "🚢", "🎸", "⚽", "🔴"],
+      "2": "The English port city famous for The Beatles and a world-class football club.",
+      "3": "1 Word",
+      "4": "_ _ _ _ _ _ _ _ _",
+      "5": "L _ _ E _ P _ _ L"
+    }
+  },
+  {
+    "id": "2026-03-26",
+    "answer": "TELEPHONE BOX",
+    "category": "Object",
+    "stages": {
+      "0": ["🇬🇧", "☎️", "📦"],
+      "1": ["🇬🇧", "☎️", "📦", "🔴", "📮"],
+      "2": "An iconic red kiosk used for public calls on British streets.",
+      "3": "2 Words",
+      "4": "_ _ _ _ _ _ _ _ _  _ _ _",
+      "5": "T _ _ E _ _ _ _ E  B _ X"
+    }
+  },
+  {
+    "id": "2026-03-27",
+    "answer": "COST AN ARM AND A LEG",
+    "category": "Idiom",
+    "stages": {
+      "0": ["💰", "🦾", "🦵"],
+      "1": ["💰", "🦾", "🦵", "💸", "😱"],
+      "2": "To be extremely expensive or overpriced.",
+      "3": "6 Words",
+      "4": "_ _ _ _  _ _  _ _ _  _ _ _  _  _ _ _",
+      "5": "C _ S T  A _  A _ M  A _ D  A  L E G"
+    }
+  },
+  {
+    "id": "2026-03-28",
+    "answer": "THE BOAT RACE",
+    "category": "Event",
+    "stages": {
+      "0": ["🇬🇧", "🛶", "🏁"],
+      "1": ["🇬🇧", "🛶", "🏁", "🎓", "🌊"],
+      "2": "An annual rowing contest between Oxford and Cambridge on the Thames.",
+      "3": "3 Words",
+      "4": "_ _ _  _ _ _ _  _ _ _ _",
+      "5": "T _ E  B _ _ T  R _ _ E"
+    }
+  },
+  {
+    "id": "2026-03-29",
+    "answer": "COLOSSEUM",
+    "category": "Landmark",
+    "stages": {
+      "0": ["🇮🇹", "🏛️", "⚔️"],
+      "1": ["🇮🇹", "🏛️", "⚔️", "🦁", "🏟️"],
+      "2": "An ancient amphitheatre in the centre of Rome used for gladiatorial contests.",
+      "3": "1 Word",
+      "4": "_ _ _ _ _ _ _ _ _",
+      "5": "C _ _ _ S _ _ _ M"
+    }
+  }
+]
