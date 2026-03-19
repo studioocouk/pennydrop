@@ -1,1 +1,1 @@
-
+wrangler kv:key put --binding=PUZZLE_STORE "today" ./puzzles/levels.json
