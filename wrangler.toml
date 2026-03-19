@@ -1,0 +1,14 @@
+name = "penny-drop"
+main = "src/worker.js"
+compatibility_date = "2026-03-19"
+
+# This links your code to the Database where puzzles are stored
+[[kv_namespaces]]
+binding = "PUZZLE_STORE"
+id = "YOUR_KV_NAMESPACE_ID"
+
+# This links to your High Score database
+[[d1_databases]]
+binding = "DB"
+database_name = "penny_drop_scores"
+database_id = "YOUR_D1_DATABASE_ID"
