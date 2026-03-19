@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penny Drop | Daily Riddle</title>
+    <style>
+        :root {
+            --uk-red: #C8102E;
+            --uk-blue: #00247D;
+            --coin-gold: #D4AF37;
+            --bg-light: #f4f4f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            background: var(--uk-blue);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .game-container {
+            width: 90%;
+            max-width: 500px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        #category-badge {
+            background: var(--uk-red);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        #emoji-display {
+            font-size: 3rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 80px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        #hint-text {
+            font-style: italic;
+            color: #555;
+            margin: 1rem 0;
+            min-height: 1.5rem;
+        }
+
+        #word-skeleton {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            letter-spacing: 0.3rem;
+            font-weight: bold;
+            margin: 1.5rem 0;
+            color: var(--uk-blue);
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--uk-blue);
+        }
+
+        button {
+            padding: 12px 20px;
+            background: var(--uk-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #001a5a;
+        }
+
+        .stage-dots {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #ccc;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .dot.active {
+            background: var(--coin-gold);
+            transform: scale(1.2);
+            box-shadow: 0 0 8px var(--coin-gold);
+        }
+
+        .success { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PENNY DROP</h1>
+</header>
+
+<div class="game-container">
+    <div id="category-badge">CATEGORY: LANDMARK</div>
+    
+    <div id="emoji-display">🇬🇧 🏛️ 🔔</div>
+    
+    <div id="hint-text"></div>
+    
+    <div id="word-skeleton">_ _ _  _ _ _</div>
+
+    <div class="input-area">
+        <input type="text" id="guess-input" placeholder="Enter your guess..." autofocus>
+        <button onclick="handleGuess()">DROP</button>
+    </div>
+
+    <div class="stage-dots" id="dots-container">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+    
+    <p id="feedback-msg"></p>
+</div>
+
+<script>
+    // In the real app, this data would come from your Cloudflare Worker!
+    // This is just a test with the Big Ben data.
+    const testPuzzle = {
+        answer: "BIG BEN",
+        category: "LANDMARK",
+        stages: {
+            "0": ["🇬🇧", "🏛️", "🔔"],
+            "1": ["🇬🇧", "🏛️", "🔔", "🕰️", "🕛"],
+            "2": "The nickname for the Great Bell of the Great Clock of Westminster.",
+            "3": "2 Words",
+            "4": "_ _ _  _ _ _",
+            "5": "B _ _  _ E _"
+        }
+    };
+
+    let currentStage = 0;
+
+    function handleGuess() {
+        const input = document.getElementById('guess-input');
+        const guess = input.value.toUpperCase().trim();
+        const feedback = document.getElementById('feedback-msg');
+
+        if (guess === testPuzzle.answer) {
+            feedback.innerHTML = "<span class='success'>PENNY DROP! You got it!</span>";
+            input.disabled = true;
+        } else {
+            currentStage++;
+            if (currentStage <= 5) {
+                updateUI();
+                feedback.innerText = "Not quite! The penny drops deeper...";
+                input.value = "";
+            } else {
+                feedback.innerText = "Game Over! The answer was: " + testPuzzle.answer;
+                input.disabled = true;
+            }
+        }
+    }
+
+    function updateUI() {
+        const emojiDisplay = document.getElementById('emoji-display');
+        const hintText = document.getElementById('hint-text');
+        const skeleton = document.getElementById('word-skeleton');
+        const dots = document.querySelectorAll('.dot');
+
+        // Update Emojis (Stages 0 and 1)
+        if (currentStage === 0) emojiDisplay.innerText = testPuzzle.stages["0"].join(' ');
+        if (currentStage === 1) emojiDisplay.innerText = testPuzzle.stages["1"].join(' ');
+
+        // Update Text Hint (Stage 2)
+        if (currentStage >= 2) hintText.innerText = testPuzzle.stages["2"];
+
+        // Update Structure/Skeleton (Stages 3, 4, 5)
+        if (currentStage === 3) skeleton.innerText = testPuzzle.stages["3"];
+        if (currentStage === 4) skeleton.innerText = testPuzzle.stages["4"];
+        if (currentStage === 5) skeleton.innerText = testPuzzle.stages["5"];
+
+        // Update Dots
+        dots.forEach((dot, idx) => {
+            if (idx === currentStage) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+    }
+
+    // Initialize the first stage
+    updateUI();
+</script>
+
+</body>
+</html>
