@@ -167,71 +167,67 @@
     <p id="feedback-msg"></p>
 </div>
 
-let currentStage = -1;
-// This automatically creates "2026-03-19" to match your KV Key
-const puzzleId = new Date().toISOString().split('T')[0]; 
+<script>
+    let currentStage = -1;
+    const puzzleId = new Date().toISOString().split('T')[0]; 
 
-async function initGame() {
-    try {
+    async function initGame() {
+        try {
+            const response = await fetch('https://pennydrop.studiooonurorkut.workers.dev', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ puzzleId, currentStage: -1, guess: "" })
+            });
+            const data = await response.json();
+            if (data.error) {
+                document.getElementById('feedback-msg').innerText = "Puzzle not found for today.";
+                return;
+            }
+            currentStage = 0;
+            updateUI(data.newClue, data.category);
+        } catch (err) {
+            document.getElementById('feedback-msg').innerText = "Connection error. Is the Worker live?";
+        }
+    }
+
+    async function handleGuess() {
+        const input = document.getElementById('guess-input');
         const response = await fetch('https://pennydrop.studiooonurorkut.workers.dev', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ puzzleId, currentStage: -1, guess: "" })
+            body: JSON.stringify({ puzzleId, currentStage, guess: input.value })
         });
-        const data = await response.json();
-        
-        if (data.error) {
-            document.getElementById('feedback-msg').innerText = "Puzzle not found for today.";
-            return;
+        const result = await response.json();
+
+        if (result.solved) {
+            document.getElementById('feedback-msg').innerHTML = `<span class='success'>${result.message}</span>`;
+            input.disabled = true;
+        } else if (result.gameOver) {
+            document.getElementById('feedback-msg').innerText = "Game Over! Answer: " + result.answer;
+            input.disabled = true;
+        } else {
+            currentStage = result.nextStage;
+            updateUI(result.newClue);
+            input.value = "";
         }
-
-        currentStage = 0;
-        updateUI(data.newClue, data.category);
-    } catch (err) {
-        document.getElementById('feedback-msg').innerText = "Connection error. Is the Worker live?";
     }
-}
 
-async function handleGuess() {
-    const input = document.getElementById('guess-input');
-    const response = await fetch('https://pennydrop.studiooonurorkut.workers.dev', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ puzzleId, currentStage, guess: input.value })
-    });
-    const result = await response.json();
+    function updateUI(clue, category) {
+        if (category) document.getElementById('category-badge').innerText = "CATEGORY: " + category;
+        const display = document.getElementById('emoji-display');
+        const hintArea = document.getElementById('hint-text');
+        const skeleton = document.getElementById('word-skeleton');
 
-    if (result.solved) {
-        document.getElementById('feedback-msg').innerHTML = `<span class='success'>${result.message}</span>`;
-        input.disabled = true;
-    } else if (result.gameOver) {
-        document.getElementById('feedback-msg').innerText = "Game Over! Answer: " + result.answer;
-        input.disabled = true;
-    } else {
-        currentStage = result.nextStage;
-        updateUI(result.newClue);
-        input.value = "";
+        if (currentStage <= 1) display.innerText = Array.isArray(clue) ? clue.join(' ') : clue;
+        if (currentStage === 2) hintArea.innerText = clue;
+        if (currentStage >= 3) skeleton.innerText = clue;
+
+        document.querySelectorAll('.dot').forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === currentStage);
+        });
     }
-}
 
-function updateUI(clue, category) {
-    if (category) document.getElementById('category-badge').innerText = "CATEGORY: " + category;
-    
-    const display = document.getElementById('emoji-display');
-    const hintArea = document.getElementById('hint-text');
-    const skeleton = document.getElementById('word-skeleton');
-
-    // Display emojis for stages 0 and 1, text for others
-    if (currentStage <= 1) display.innerText = Array.isArray(clue) ? clue.join(' ') : clue;
-    if (currentStage === 2) hintArea.innerText = clue;
-    if (currentStage >= 3) skeleton.innerText = clue;
-
-    document.querySelectorAll('.dot').forEach((dot, idx) => {
-        dot.classList.toggle('active', idx === currentStage);
-    });
-}
-
-// Start the game logic
-initGame();
+    initGame();
+</script>
 </body>
 </html>
